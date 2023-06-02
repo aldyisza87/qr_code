@@ -1,6 +1,10 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:qr_code/app/controllers/auth_controller.dart';
+import 'package:qr_code/app/modules/loading/loading_screen.dart';
 
 import '../controllers/login_controller.dart';
 
@@ -11,6 +15,7 @@ class LoginView extends GetView<LoginController> {
       TextEditingController(text: 'admin@gmail.com');
   final TextEditingController passC = TextEditingController(text: 'qctna123');
 
+  final AuthController authC = Get.find<AuthController>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,13 +72,26 @@ class LoginView extends GetView<LoginController> {
               height: 20,
             ),
             ElevatedButton(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(14)),
-                    padding:
-                        const EdgeInsetsDirectional.symmetric(vertical: 18)),
-                child: Text('LOGIN'))
+              onPressed: () {
+                if (controller.isLoading.isFalse) {
+                  if (emailC.text.isNotEmpty && passC.text.isNotEmpty) {
+                    controller.isLoading(true);
+                    authC.login(emailC.text, passC.text);
+                    controller.isLoading(false);
+                  } else {
+                    Get.snackbar("error", "Email & Password wajib di isi");
+                  }
+                }
+              },
+              style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(14)),
+                  padding: const EdgeInsetsDirectional.symmetric(vertical: 18)),
+              child: Obx(
+                () =>
+                    Text(controller.isLoading.isFalse ? 'LOGIN' : 'LOADING...'),
+              ),
+            )
           ],
         ));
   }
