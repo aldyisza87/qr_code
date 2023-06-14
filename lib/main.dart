@@ -36,21 +36,22 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<User?>(
-        // memantau setiap perubahan dari otentikasi
-        stream: auth.authStateChanges(),
-        builder: (context, snapAuth) {
-          // handle status if connection waiting -> LoginScreen(berupa Loading progres indikator)
-          if (snapAuth.connectionState == ConnectionState.waiting) {
-            return const LoadingView();
-          }
+      // memantau setiap perubahan dari otentikasi
+      stream: auth.authStateChanges(),
+      builder: (context, snapAuth) {
+        // handle status if connection waiting -> LoginScreen(berupa Loading progres indikator)
+        if (snapAuth.connectionState == ConnectionState.waiting) {
+          return const LoadingView();
+        }
 
-          return GetMaterialApp(
-            debugShowCheckedModeBanner: false,
-            title: "QR Code",
-            // cek status snapAuth yang berupa user jika memiliki data -> home jika tidak login
-            initialRoute: snapAuth.hasData ? Routes.home : Routes.login,
-            getPages: AppPages.routes,
-          );
-        });
+        return GetMaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: "QR Code",
+          // cek status snapAuth yang berupa user jika memiliki data -> home jika tidak login
+          initialRoute: snapAuth.hasData ? Routes.home : Routes.login,
+          getPages: AppPages.routes,
+        );
+      },
+    );
   }
 }
