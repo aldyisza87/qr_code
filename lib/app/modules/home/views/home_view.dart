@@ -40,7 +40,7 @@ class HomeView extends GetView<HomeController> {
               case 1:
                 title = "Products";
                 icon = Icons.list_alt_rounded;
-                ontap = () => Get.toNamed(Routes.detailProduct);
+                ontap = () => Get.toNamed(Routes.products);
                 break;
               case 2:
                 title = "QR Code";

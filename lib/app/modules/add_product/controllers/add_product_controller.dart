@@ -1,9 +1,21 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 
 class AddProductController extends GetxController {
-  //TODO: Implement AddProductController
+  RxBool isLoading = false.obs;
 
-  final count = 0.obs;
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-  void increment() => count.value++;
+  Future<Map<String, dynamic>> addProduct(Map<String, dynamic> data) async {
+    try {
+      var hasil = await firestore.collection("product").add(data);
+      await firestore
+          .collection("product")
+          .doc(hasil.id)
+          .update({"productId": hasil.id});
+      return {"error": false, "message": "Berhasil menambahkan product."};
+    } catch (e) {
+      return {"error": false, "message": "Tidak dapat menambahkan product."};
+    }
+  }
 }

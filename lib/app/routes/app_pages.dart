@@ -41,7 +41,7 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.addProduct,
-      page: () => const AddProductView(),
+      page: () => AddProductView(),
       binding: AddProductBinding(),
     ),
   ];
