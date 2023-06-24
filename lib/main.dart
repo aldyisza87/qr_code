@@ -29,6 +29,7 @@ void main() async {
 class MyApp extends StatelessWidget {
   MyApp({super.key});
 
+// meng inisialisasi firebase auth
   final FirebaseAuth auth = FirebaseAuth.instance;
 
   /* firebase auth dengan streambuilder ( import package firebase_auth) -> 

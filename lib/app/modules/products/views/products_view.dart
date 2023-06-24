@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:qr_code/app/data/models/product_model.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 import '../../../routes/app_pages.dart';
@@ -15,14 +17,33 @@ class ProductsView extends GetView<ProductsController> {
         title: const Text('ProductsView'),
         centerTitle: true,
       ),
-      body: StreamBuilder(
+      body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
           stream: controller.streamProducts(),
           // memantau stream dari database product
           builder: (context, snapProduct) {
+            // cek jika snap product koneksi sedang waiting maka tampilkan widget CircularProgres / loading view
+            if (snapProduct.connectionState == ConnectionState.waiting) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+            // cek data product jika kosong maka tampilkan widget text
+            if (snapProduct.data!.docs.isEmpty) {
+              return const Text("No Products");
+            }
+
+            //Tampung product dalam List dengan nama allProduct dengan awal kosong []
+            List<ProductModel> allProducts = [];
+            // jika data dalam collection ada maka looping untuk menampilkan product yang ada dalam dokumen "product"
+            for (var element in snapProduct.data!.docs) {
+              allProducts.add(ProductModel.fromJson(element.data()));
+            }
             return ListView.builder(
-              itemCount: 5,
+              itemCount: allProducts.length,
               padding: const EdgeInsets.all(20),
               itemBuilder: (context, index) {
+                // mengambil data product setiap indexnya
+                ProductModel product = allProducts[index];
                 return Card(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16),
@@ -31,7 +52,7 @@ class ProductsView extends GetView<ProductsController> {
                   elevation: 5,
                   child: InkWell(
                     onTap: () {
-                      Get.toNamed(Routes.detailProduct);
+                      Get.toNamed(Routes.detailProduct, arguments: product);
                     },
                     borderRadius: BorderRadius.circular(16),
                     child: Container(
@@ -40,19 +61,20 @@ class ProductsView extends GetView<ProductsController> {
                       height: 100,
                       child: Row(
                         children: [
-                          const Expanded(
+                          Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  "6320A395",
-                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                  product.code,
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 5,
                                 ),
-                                Text("MMKI"),
-                                Text("QTY : 1000"),
+                                Text(product.name),
+                                Text("Jumlah : ${product.qty}"),
                               ],
                             ),
                           ),
@@ -60,7 +82,7 @@ class ProductsView extends GetView<ProductsController> {
                             height: 70,
                             width: 70,
                             child: QrImageView(
-                              data: "6320A395",
+                              data: product.code,
                               size: 200.0,
                               version: QrVersions.auto,
                             ),
