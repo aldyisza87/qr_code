@@ -14,7 +14,7 @@ class ProductsView extends GetView<ProductsController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('ProductsView'),
+        title: const Text('Products'),
         centerTitle: true,
       ),
       body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
@@ -52,6 +52,7 @@ class ProductsView extends GetView<ProductsController> {
                   elevation: 5,
                   child: InkWell(
                     onTap: () {
+                      // pindah page ke detail product view dimana kita bisa lempar argumen dari product model
                       Get.toNamed(Routes.detailProduct, arguments: product);
                     },
                     borderRadius: BorderRadius.circular(16),
