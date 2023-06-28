@@ -82,7 +82,29 @@ class DetailProductView extends GetView<DetailProductController> {
             ),
             const SizedBox(height: 35),
             ElevatedButton(
-              onPressed: () async {},
+              onPressed: () async {
+                if (controller.isLoadingUpdate.isFalse) {
+                  // kontroler name dan qty wajib di isi
+                  if (nameC.text.isNotEmpty && qtyC.text.isNotEmpty) {
+                    controller.isLoadingUpdate(true);
+                    Map<String, dynamic> hasil = await controller.editProduct({
+                      "id": product.productId,
+                      "name": nameC.text,
+                      // qty = type data number {mengubah string ke integer}
+                      "qty": int.tryParse(qtyC.text) ?? 0,
+                    });
+                    controller.isLoadingUpdate(false);
+
+                    // jika hasil erorr maka tampilkan pesan eror jika berhasil tampilkan snackbar berhasil
+                    Get.snackbar(hasil["error"] == true ? "Erorr" : "Berhasil",
+                        hasil["message"],
+                        duration: const Duration(seconds: 2));
+                  } else {
+                    Get.snackbar("Error", "Semua data wajib diisi",
+                        duration: const Duration(seconds: 2));
+                  }
+                }
+              },
               style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(9),
@@ -90,11 +112,47 @@ class DetailProductView extends GetView<DetailProductController> {
                 padding: const EdgeInsets.symmetric(vertical: 20),
               ),
               child: Obx(
-                () => Text(controller.isLoading.isFalse
+                () => Text(controller.isLoadingUpdate.isFalse
                     ? "UPDATE PRODUCT"
                     : "LOADING..."),
               ),
             ),
+            TextButton(
+              onPressed: () {
+                Get.defaultDialog(
+                  title: "Delete Product",
+                  middleText: "Are you sure to delete this product ? ",
+                  actions: [
+                    OutlinedButton(
+                      onPressed: () => Get.back(),
+                      child: const Text("CANCEL"),
+                    ),
+                    ElevatedButton(
+                      onPressed: () async {
+                        controller.isLoadingDelete(true);
+
+                        await Future.delayed(
+                          const Duration(seconds: 2),
+                        );
+                        controller.isLoadingDelete(false);
+                      },
+                      child: Obx(
+                        () => controller.isLoadingDelete.isFalse
+                            ? const Text("DELETE")
+                            : const CircularProgressIndicator(
+                                color: Colors.white,
+                                strokeWidth: 4,
+                              ),
+                      ),
+                    )
+                  ],
+                );
+              },
+              child: const Text(
+                "Delete Product",
+                style: TextStyle(color: Colors.redAccent),
+              ),
+            )
           ],
         ));
   }
