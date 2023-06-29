@@ -130,10 +130,15 @@ class DetailProductView extends GetView<DetailProductController> {
                     ElevatedButton(
                       onPressed: () async {
                         controller.isLoadingDelete(true);
+                        Map<String, dynamic> hasil =
+                            await controller.deleteProduct(product.productId);
+                        Get.back(); // untuk menutup dialog snakbar
+                        Get.back(); // untuk kembali ke all product
+                        Get.snackbar(
+                            hasil["error"] == true ? "Erorr" : "Berhasil",
+                            hasil["message"],
+                            duration: const Duration(seconds: 2));
 
-                        await Future.delayed(
-                          const Duration(seconds: 2),
-                        );
                         controller.isLoadingDelete(false);
                       },
                       child: Obx(
