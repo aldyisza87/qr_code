@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 
+import '../../../../search.dart';
 import '../controllers/add_product_controller.dart';
 
 class AddProductView extends GetView<AddProductController> {
@@ -93,6 +94,17 @@ class AddProductView extends GetView<AddProductController> {
             child: Obx(
               () => Text(
                   controller.isLoading.isFalse ? "Add Product" : "LOADING..."),
+            ),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              // pindah ke halaman simple
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => const Search()));
+            },
+            child: const Text(
+              'Basic Navigation',
+              style: TextStyle(color: Colors.white),
             ),
           ),
         ],
