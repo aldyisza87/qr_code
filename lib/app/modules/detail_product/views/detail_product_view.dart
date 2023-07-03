@@ -1,11 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
-import 'package:qr_code/app/data/models/product_model.dart';
-import 'package:qr_code/app/routes/app_pages.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
+import '../../../data/models/product_model.dart';
 import '../controllers/detail_product_controller.dart';
 
 class DetailProductView extends GetView<DetailProductController> {

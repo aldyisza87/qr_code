@@ -14,7 +14,7 @@ class AddProductView extends GetView<AddProductController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('AddProductView'),
+        title: const Text('Add Product'),
         centerTitle: true,
       ),
       body: ListView(
@@ -24,7 +24,7 @@ class AddProductView extends GetView<AddProductController> {
             autocorrect: false,
             maxLength: 10,
             controller: codeC,
-            keyboardType: TextInputType.number,
+            keyboardType: TextInputType.text,
             decoration: InputDecoration(
               labelText: "Product Code",
               border: OutlineInputBorder(
@@ -77,11 +77,11 @@ class AddProductView extends GetView<AddProductController> {
                   controller.isLoading(false);
 
                   Get.back();
-                  Get.snackbar(hasil["error"] == true ? "Error" : "Succes",
+                  Get.snackbar(hasil["error"] == true ? "error" : "Succes",
                       hasil["message"]);
+                } else {
+                  Get.snackbar("Error", "Semua wajib di isi");
                 }
-              } else {
-                Get.snackbar("Error", "Semua wajib di isi");
               }
             },
             style: ElevatedButton.styleFrom(

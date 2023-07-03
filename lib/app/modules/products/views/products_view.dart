@@ -29,7 +29,7 @@ class ProductsView extends GetView<ProductsController> {
             }
             // cek data product jika kosong maka tampilkan widget text
             if (snapProduct.data!.docs.isEmpty) {
-              return const Text("No Products");
+              return const Center(child: Text("No Products"));
             }
 
             //Tampung product dalam List dengan nama allProduct dengan awal kosong []
@@ -72,7 +72,7 @@ class ProductsView extends GetView<ProductsController> {
                                       fontWeight: FontWeight.bold),
                                 ),
                                 const SizedBox(
-                                  height: 5,
+                                  height: 2,
                                 ),
                                 Text(product.name),
                                 Text("Jumlah : ${product.qty}"),

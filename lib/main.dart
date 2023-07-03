@@ -48,6 +48,7 @@ class MyApp extends StatelessWidget {
         return GetMaterialApp(
           debugShowCheckedModeBanner: false,
           title: "QR Code",
+
           // cek status snapAuth yang berupa user jika memiliki data -> home jika tidak login
           initialRoute: snapAuth.hasData ? Routes.home : Routes.login,
           getPages: AppPages.routes,

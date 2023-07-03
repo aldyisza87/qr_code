@@ -15,7 +15,7 @@ class AddProductController extends GetxController {
           .update({"productId": hasil.id});
       return {"error": false, "message": "Berhasil menambahkan product."};
     } catch (e) {
-      return {"error": false, "message": "Tidak dapat menambahkan product."};
+      return {"error": true, "message": "Tidak dapat menambahkan product."};
     }
   }
 }
