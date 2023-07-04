@@ -116,6 +116,7 @@ class HomeView extends GetView<HomeController> {
               },
             );
           }),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           String barcode = await FlutterBarcodeScanner.scanBarcode(
@@ -139,7 +140,28 @@ class HomeView extends GetView<HomeController> {
         },
         child: const Icon(Icons.qr_code_scanner),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      bottomNavigationBar: BottomAppBar(
+        color: Colors.amber,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            IconButton(
+              onPressed: () {},
+              icon: const Icon(
+                Icons.home,
+                color: Colors.black,
+              ),
+            ),
+            IconButton(
+              onPressed: () {},
+              icon: const Icon(
+                Icons.home,
+                color: Colors.black,
+              ),
+            )
+          ],
+        ),
+      ),
     );
   }
 }
