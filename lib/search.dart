@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class Search extends StatefulWidget {
@@ -9,84 +10,85 @@ class Search extends StatefulWidget {
 }
 
 class _SearchState extends State<Search> {
-  var name = "";
+  List _allResults = [];
+  List _resultList = [];
+  final TextEditingController _searcController = TextEditingController();
+
+  @override
+  void initState() {
+    _searcController.addListener(_onSearchChanged);
+    super.initState();
+  }
+
+  _onSearchChanged() {
+    searchResultList();
+  }
+
+  searchResultList() {
+    var showResult = [];
+    if (_searcController.text != "") {
+      for (var productSnapShot in _allResults) {
+        var name = productSnapShot['name'].toString().toLowerCase();
+        if (name.contains(_searcController.text.toLowerCase())) {
+          showResult.add(productSnapShot);
+        }
+      }
+    } else {
+      showResult = List.from(_allResults);
+    }
+    setState(() {
+      _resultList = showResult;
+    });
+  }
+
+  getStream() async {
+    var data = await FirebaseFirestore.instance
+        .collection('product')
+        .orderBy('name')
+        .get();
+
+    setState(() {
+      _allResults = data.docs;
+    });
+    searchResultList();
+  }
+
+  @override
+  void dispose() {
+    _searcController.removeListener(_onSearchChanged);
+    _searcController.dispose();
+    super.dispose();
+  }
+
+  @override
+  void didChangeDependencies() {
+    getStream();
+    super.didChangeDependencies();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Card(
-          child: TextField(
-            decoration: const InputDecoration(
-                prefixIcon: Icon(Icons.search), hintText: 'Search...'),
-            onChanged: (val) {
-              setState(() {
-                name = val;
-              });
-            },
-          ),
+        title: CupertinoSearchTextField(
+          backgroundColor: Colors.white,
+          controller: _searcController,
         ),
       ),
-      body: StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance.collection('product').snapshots(),
-        builder: (context, snapshot) {
-          return (snapshot.connectionState == ConnectionState.waiting)
-              ? const Center(child: CircularProgressIndicator())
-              : ListView.builder(
-                  itemCount: snapshot.data!.docs.length,
-                  itemBuilder: (context, index) {
-                    var data = snapshot.data!.docs[index].data()
-                        as Map<dynamic, dynamic>;
-                    if (name.isEmpty) {
-                      return ListTile(
-                        title: Text(
-                          data['name'],
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
-                              color: Colors.black54,
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold),
-                        ),
-                        subtitle: Text(
-                          data['qty'].toString(),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
-                              color: Colors.black54,
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold),
-                        ),
-                      );
-                    }
-
-                    if (data['name']
-                        .toString()
-                        .toLowerCase()
-                        .startsWith(name.toLowerCase())) {
-                      return ListTile(
-                        title: Text(
-                          data['name'],
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
-                              color: Colors.black54,
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold),
-                        ),
-                        subtitle: Text(
-                          data['qty'].toString(),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
-                              color: Colors.black54,
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold),
-                        ),
-                      );
-                    }
-                    return null;
-                  },
-                );
+      body: ListView.builder(
+        itemCount: _resultList.length,
+        itemBuilder: (context, index) {
+          return ListTile(
+            title: Text(
+              _resultList[index]['code'],
+            ),
+            subtitle: Text(
+              _resultList[index]['name'],
+            ),
+            trailing: Text(
+              _resultList[index]['qty'].toString(),
+            ),
+          );
         },
       ),
     );
