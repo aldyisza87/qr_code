@@ -4,28 +4,27 @@ class ProductModel {
   final String code;
   final String name;
   final String productId;
-  final int qty;
+  final String address;
 
   ProductModel({
     // make all properties is required
     required this.code,
     required this.name,
     required this.productId,
-    required this.qty,
+    required this.address,
   });
 
   factory ProductModel.fromJson(Map<String, dynamic> json) => ProductModel(
         code: json["code"] ?? "",
         name: json["name"] ?? "",
         productId: json["productId"] ?? "",
-        // cek apakah qty produk != null jika null maka nilai default = 0
-        qty: json["qty"] ?? 0,
+        address: json["address"] ?? "",
       );
 
   Map<String, dynamic> toJson() => {
         "code": code,
         "name": name,
         "productId": productId,
-        "qty": qty,
+        "address": address,
       };
 }

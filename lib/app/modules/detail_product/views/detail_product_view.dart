@@ -9,14 +9,14 @@ class DetailProductView extends GetView<DetailProductController> {
   DetailProductView({Key? key}) : super(key: key);
   final TextEditingController codeC = TextEditingController();
   final TextEditingController nameC = TextEditingController();
-  final TextEditingController qtyC = TextEditingController();
+  final TextEditingController addressC = TextEditingController();
 
   final ProductModel product = Get.arguments;
   @override
   Widget build(BuildContext context) {
     codeC.text = product.code;
     nameC.text = product.name;
-    qtyC.text = "${product.qty}";
+    addressC.text = product.address;
 
     return Scaffold(
         appBar: AppBar(
@@ -68,7 +68,7 @@ class DetailProductView extends GetView<DetailProductController> {
             ),
             TextField(
               autocorrect: false,
-              controller: qtyC,
+              controller: addressC,
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
                 labelText: "Quantity",
@@ -81,14 +81,14 @@ class DetailProductView extends GetView<DetailProductController> {
             ElevatedButton(
               onPressed: () async {
                 if (controller.isLoadingUpdate.isFalse) {
-                  // kontroler name dan qty wajib di isi
-                  if (nameC.text.isNotEmpty && qtyC.text.isNotEmpty) {
+                  // kontroler name dan address wajib di isi
+                  if (nameC.text.isNotEmpty && addressC.text.isNotEmpty) {
                     controller.isLoadingUpdate(true);
                     Map<String, dynamic> hasil = await controller.editProduct({
                       "id": product.productId,
                       "name": nameC.text,
-                      // qty = type data number {mengubah string ke integer}
-                      "qty": int.tryParse(qtyC.text) ?? 0,
+                      // address = type data number {mengubah string ke integer}
+                      "address": int.tryParse(addressC.text) ?? 0,
                     });
                     controller.isLoadingUpdate(false);
 

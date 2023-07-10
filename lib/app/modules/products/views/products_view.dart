@@ -75,7 +75,7 @@ class ProductsView extends GetView<ProductsController> {
                                   height: 2,
                                 ),
                                 Text(product.name),
-                                Text("Jumlah : ${product.qty}"),
+                                Text("Address : ${product.address}"),
                               ],
                             ),
                           ),

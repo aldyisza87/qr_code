@@ -4,6 +4,7 @@ import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 
 import 'package:get/get.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import '../../../../search.dart';
 import '../../../controllers/auth_controller.dart';
 import '../../../data/models/product_model.dart';
 import '../../../routes/app_pages.dart';
@@ -20,6 +21,14 @@ class HomeView extends GetView<HomeController> {
           title: const Text('Dashboard'),
           centerTitle: false,
           actions: <Widget>[
+            IconButton(
+              onPressed: () {
+                // pindah ke halaman simple
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => const Search()));
+              },
+              icon: const Icon(Icons.search),
+            ),
             IconButton(
               onPressed: () {
                 Get.toNamed(Routes.addProduct);
@@ -79,7 +88,7 @@ class HomeView extends GetView<HomeController> {
                     borderRadius: BorderRadius.circular(16),
                     child: Container(
                       margin: const EdgeInsets.all(20),
-                      height: 50,
+                      height: 70,
                       child: Row(
                         children: [
                           Expanded(
@@ -95,7 +104,7 @@ class HomeView extends GetView<HomeController> {
                                   height: 2,
                                 ),
                                 Text("Name     : ${product.name}"),
-                                Text("Quantity : ${product.qty}"),
+                                Text("Address : ${product.address}"),
                               ],
                             ),
                           ),
@@ -116,11 +125,11 @@ class HomeView extends GetView<HomeController> {
               },
             );
           }),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           String barcode = await FlutterBarcodeScanner.scanBarcode(
-            "#000000",
+            "#39DE1E",
             "CANCEL",
             true,
             ScanMode.QR,
@@ -139,28 +148,6 @@ class HomeView extends GetView<HomeController> {
           }
         },
         child: const Icon(Icons.qr_code_scanner),
-      ),
-      bottomNavigationBar: BottomAppBar(
-        color: Colors.amber,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            IconButton(
-              onPressed: () {},
-              icon: const Icon(
-                Icons.home,
-                color: Colors.black,
-              ),
-            ),
-            IconButton(
-              onPressed: () {},
-              icon: const Icon(
-                Icons.home,
-                color: Colors.black,
-              ),
-            )
-          ],
-        ),
       ),
     );
   }

@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
+
 import '../../../controllers/auth_controller.dart';
 import '../../../routes/app_pages.dart';
-
 import '../controllers/login_controller.dart';
 
 class LoginView extends GetView<LoginController> {
@@ -76,6 +75,10 @@ class LoginView extends GetView<LoginController> {
                   if (hasil["error"] == true) {
                     Get.snackbar("Error", hasil["message"]);
                   } else {
+                    Get.offAllNamed(Routes.home);
+                  }
+                  // handle login status jika email "admin@gmail.com" maka tampilkan dashboard
+                  if (emailC.text == "admin@gmail.com") {
                     Get.offAllNamed(Routes.home);
                   }
                 } else {

@@ -80,13 +80,13 @@ class _SearchState extends State<Search> {
         itemBuilder: (context, index) {
           return ListTile(
             title: Text(
-              _resultList[index]['code'],
-            ),
-            subtitle: Text(
               _resultList[index]['name'],
             ),
+            leading: Text(
+              _resultList[index]['code'],
+            ),
             trailing: Text(
-              _resultList[index]['qty'].toString(),
+              _resultList[index]['address'],
             ),
           );
         },

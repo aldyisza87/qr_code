@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:qr_code/app/controllers/auth_controller.dart';
 
 import 'app/modules/loading/loading_screen.dart';
@@ -48,8 +49,12 @@ class MyApp extends StatelessWidget {
         return GetMaterialApp(
           debugShowCheckedModeBanner: false,
           title: "QR Code",
-
-          // cek status snapAuth yang berupa user jika memiliki data -> home jika tidak login
+          theme: ThemeData(
+            textTheme: GoogleFonts.varelaRoundTextTheme(
+              Theme.of(context).textTheme,
+            ),
+          ),
+          // cek status snapAuth yang berupa user jika memiliki data -> home  ! jika tidak ->login
           initialRoute: snapAuth.hasData ? Routes.home : Routes.login,
           getPages: AppPages.routes,
         );

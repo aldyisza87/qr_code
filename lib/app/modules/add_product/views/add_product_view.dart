@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
 
-import '../../../../search.dart';
 import '../controllers/add_product_controller.dart';
 
 class AddProductView extends GetView<AddProductController> {
   AddProductView({Key? key}) : super(key: key);
   final TextEditingController codeC = TextEditingController();
   final TextEditingController nameC = TextEditingController();
-  final TextEditingController qtyC = TextEditingController();
+  final TextEditingController addressC = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +21,7 @@ class AddProductView extends GetView<AddProductController> {
         children: [
           TextField(
             autocorrect: false,
-            maxLength: 10,
+            maxLength: 20,
             controller: codeC,
             keyboardType: TextInputType.text,
             decoration: InputDecoration(
@@ -52,10 +50,9 @@ class AddProductView extends GetView<AddProductController> {
           ),
           TextField(
             autocorrect: false,
-            controller: qtyC,
-            keyboardType: TextInputType.number,
+            controller: addressC,
             decoration: InputDecoration(
-              labelText: "Quantity",
+              labelText: "Address",
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(14),
               ),
@@ -67,13 +64,13 @@ class AddProductView extends GetView<AddProductController> {
               if (controller.isLoading.isFalse) {
                 if (codeC.text.isNotEmpty &&
                     nameC.text.isNotEmpty &&
-                    qtyC.text.isNotEmpty) {
+                    addressC.text.isNotEmpty) {
                   controller.isLoading(true);
                   Map<String, dynamic> hasil = await controller.addProduct({
                     "code": codeC.text,
                     "name": nameC.text,
                     // mengubah text menjadi integer jika gagal try maka nilai defaultnya 0
-                    "qty": int.tryParse(qtyC.text) ?? 0,
+                    "address": addressC.text,
                   });
                   controller.isLoading(false);
 
@@ -94,17 +91,6 @@ class AddProductView extends GetView<AddProductController> {
             child: Obx(
               () => Text(
                   controller.isLoading.isFalse ? "Add Product" : "LOADING..."),
-            ),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              // pindah ke halaman simple
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => const Search()));
-            },
-            child: const Text(
-              'Basic Navigation',
-              style: TextStyle(color: Colors.white),
             ),
           ),
         ],
