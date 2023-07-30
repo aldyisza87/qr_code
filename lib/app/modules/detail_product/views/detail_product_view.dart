@@ -9,16 +9,25 @@ class DetailProductView extends GetView<DetailProductController> {
   DetailProductView({Key? key}) : super(key: key);
   final TextEditingController codeC = TextEditingController();
   final TextEditingController nameC = TextEditingController();
+  final TextEditingController merekC = TextEditingController();
+  final TextEditingController kondisiC = TextEditingController();
   final TextEditingController addressC = TextEditingController();
+  final TextEditingController noteC = TextEditingController();
 
   final ProductModel product = Get.arguments;
   @override
   Widget build(BuildContext context) {
     codeC.text = product.code;
     nameC.text = product.name;
+    merekC.text = product.merek;
+    kondisiC.text = product.kondisi;
     addressC.text = product.address;
+    noteC.text = product.note;
+
+    String data = product.code;
 
     return Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           title: const Text('Detail Product'),
           centerTitle: true,
@@ -29,16 +38,23 @@ class DetailProductView extends GetView<DetailProductController> {
             Center(
               child: SizedBox(
                 height: 150,
-                width: 150,
-                child: QrImageView(data: product.code),
+                child: Column(
+                  children: [
+                    Text(
+                      data,
+                      style: const TextStyle(fontSize: 18),
+                    ),
+                    QrImageView(
+                      data: product.code,
+                      size: 120,
+                    ),
+                  ],
+                ),
               ),
-            ),
-            const SizedBox(
-              height: 20,
             ),
             TextField(
               autocorrect: false,
-              maxLength: 10,
+              maxLength: 20,
               readOnly: true,
               controller: codeC,
               keyboardType: TextInputType.number,
@@ -54,10 +70,24 @@ class DetailProductView extends GetView<DetailProductController> {
             ),
             TextField(
               autocorrect: false,
-              controller: nameC,
+              controller: merekC,
               keyboardType: TextInputType.text,
               decoration: InputDecoration(
-                labelText: "Name Product",
+                labelText: "Merek",
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(14),
+                ),
+              ),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            TextField(
+              autocorrect: false,
+              controller: kondisiC,
+              keyboardType: TextInputType.text,
+              decoration: InputDecoration(
+                labelText: "Kondisi",
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(14),
                 ),
@@ -69,9 +99,22 @@ class DetailProductView extends GetView<DetailProductController> {
             TextField(
               autocorrect: false,
               controller: addressC,
-              keyboardType: TextInputType.number,
               decoration: InputDecoration(
-                labelText: "Quantity",
+                labelText: "Address",
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(14),
+                ),
+              ),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            TextField(
+              autocorrect: false,
+              controller: noteC,
+              keyboardType: TextInputType.text,
+              decoration: InputDecoration(
+                labelText: "Note",
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(14),
                 ),
@@ -87,8 +130,10 @@ class DetailProductView extends GetView<DetailProductController> {
                     Map<String, dynamic> hasil = await controller.editProduct({
                       "id": product.productId,
                       "name": nameC.text,
-                      // address = type data number {mengubah string ke integer}
-                      "address": int.tryParse(addressC.text) ?? 0,
+                      "kondisi": kondisiC.text,
+                      "note": noteC.text,
+                      "merek": merekC.text,
+                      "address": addressC.text,
                     });
                     controller.isLoadingUpdate(false);
 

@@ -11,7 +11,10 @@ class DetailProductController extends GetxController {
     try {
       await firestore.collection("product").doc(data["id"]).update({
         "name": data["name"],
-        "qty": data["qty"],
+        "merek": data["merek"],
+        "kondisi": data["kondisi"],
+        "address": data["address"],
+        "note": data["note"],
       });
       return {"error": false, "message": "Berhasi update product."};
     } catch (e) {

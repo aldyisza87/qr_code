@@ -18,7 +18,7 @@ class HomeView extends GetView<HomeController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: const Text('Dashboard'),
+          title: const Text('TNA aset'),
           centerTitle: false,
           actions: <Widget>[
             IconButton(

@@ -7,7 +7,10 @@ class AddProductView extends GetView<AddProductController> {
   AddProductView({Key? key}) : super(key: key);
   final TextEditingController codeC = TextEditingController();
   final TextEditingController nameC = TextEditingController();
+  final TextEditingController merekC = TextEditingController();
+  final TextEditingController kondisiC = TextEditingController();
   final TextEditingController addressC = TextEditingController();
+  final TextEditingController noteC = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -50,9 +53,51 @@ class AddProductView extends GetView<AddProductController> {
           ),
           TextField(
             autocorrect: false,
+            controller: merekC,
+            keyboardType: TextInputType.text,
+            decoration: InputDecoration(
+              labelText: "Merek",
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(14),
+              ),
+            ),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          TextField(
+            autocorrect: false,
+            controller: kondisiC,
+            keyboardType: TextInputType.text,
+            decoration: InputDecoration(
+              labelText: "Kondisi",
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(14),
+              ),
+            ),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          TextField(
+            autocorrect: false,
             controller: addressC,
             decoration: InputDecoration(
-              labelText: "Address",
+              labelText: "Location",
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(14),
+              ),
+            ),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          TextField(
+            autocorrect: false,
+            controller: noteC,
+            keyboardType: TextInputType.text,
+            decoration: InputDecoration(
+              labelText: "Note",
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(14),
               ),
@@ -64,11 +109,17 @@ class AddProductView extends GetView<AddProductController> {
               if (controller.isLoading.isFalse) {
                 if (codeC.text.isNotEmpty &&
                     nameC.text.isNotEmpty &&
+                    merekC.text.isNotEmpty &&
+                    kondisiC.text.isNotEmpty &&
+                    noteC.text.isNotEmpty &&
                     addressC.text.isNotEmpty) {
                   controller.isLoading(true);
                   Map<String, dynamic> hasil = await controller.addProduct({
                     "code": codeC.text,
                     "name": nameC.text,
+                    "merek": merekC.text,
+                    "kondisi": kondisiC.text,
+                    "note": noteC.text,
                     // mengubah text menjadi integer jika gagal try maka nilai defaultnya 0
                     "address": addressC.text,
                   });
