@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
+import 'package:qr_code/app/widget/text_field.dart';
 import '../../../data/models/product_model.dart';
 import '../controllers/detail_product_controller.dart';
 
@@ -28,8 +29,15 @@ class DetailProductView extends GetView<DetailProductController> {
 
     return Scaffold(
         resizeToAvoidBottomInset: false,
+        backgroundColor: const Color(0xFF363062),
         appBar: AppBar(
-          title: const Text('Detail Product'),
+          backgroundColor: const Color(0xFF4D4C7D),
+          elevation: 0,
+          title: const Text(
+            'Detail',
+            style: TextStyle(
+                fontSize: 24, fontWeight: FontWeight.bold, letterSpacing: 1.8),
+          ),
           centerTitle: true,
         ),
         body: ListView(
@@ -37,169 +45,159 @@ class DetailProductView extends GetView<DetailProductController> {
           children: [
             Center(
               child: SizedBox(
-                height: 150,
+                height: 190,
                 child: Column(
                   children: [
+                    InkWell(
+                      onTap: () {},
+                      child: QrImageView(
+                        data: product.code,
+                        size: 120,
+                        backgroundColor: Colors.white,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 8,
+                    ),
                     Text(
                       data,
-                      style: const TextStyle(fontSize: 18),
-                    ),
-                    QrImageView(
-                      data: product.code,
-                      size: 120,
+                      style: const TextStyle(fontSize: 18, color: Colors.white),
                     ),
                   ],
                 ),
               ),
             ),
-            TextField(
-              autocorrect: false,
-              maxLength: 20,
-              readOnly: true,
-              controller: codeC,
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(
-                labelText: "Product Code",
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(14),
-                ),
-              ),
-            ),
+            CustomTextField(controller: nameC, labelText: "Name Product"),
             const SizedBox(
               height: 10,
             ),
-            TextField(
-              autocorrect: false,
-              controller: merekC,
-              keyboardType: TextInputType.text,
-              decoration: InputDecoration(
-                labelText: "Merek",
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(14),
-                ),
-              ),
-            ),
+            CustomTextField(controller: merekC, labelText: "Merek"),
             const SizedBox(
               height: 10,
             ),
-            TextField(
-              autocorrect: false,
-              controller: kondisiC,
-              keyboardType: TextInputType.text,
-              decoration: InputDecoration(
-                labelText: "Kondisi",
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(14),
-                ),
-              ),
-            ),
+            CustomTextField(controller: kondisiC, labelText: "Kondisi"),
             const SizedBox(
               height: 10,
             ),
-            TextField(
-              autocorrect: false,
-              controller: addressC,
-              decoration: InputDecoration(
-                labelText: "Address",
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(14),
-                ),
-              ),
-            ),
+            CustomTextField(controller: addressC, labelText: "Lokasi"),
             const SizedBox(
               height: 10,
             ),
-            TextField(
-              autocorrect: false,
-              controller: noteC,
-              keyboardType: TextInputType.text,
-              decoration: InputDecoration(
-                labelText: "Note",
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(14),
-                ),
-              ),
+            CustomTextField(controller: noteC, labelText: "Keterangan"),
+            const SizedBox(
+              height: 10,
             ),
-            const SizedBox(height: 35),
-            ElevatedButton(
-              onPressed: () async {
-                if (controller.isLoadingUpdate.isFalse) {
-                  // kontroler name dan address wajib di isi
-                  if (nameC.text.isNotEmpty && addressC.text.isNotEmpty) {
-                    controller.isLoadingUpdate(true);
-                    Map<String, dynamic> hasil = await controller.editProduct({
-                      "id": product.productId,
-                      "name": nameC.text,
-                      "kondisi": kondisiC.text,
-                      "note": noteC.text,
-                      "merek": merekC.text,
-                      "address": addressC.text,
-                    });
-                    controller.isLoadingUpdate(false);
+            SizedBox(
+              height: 80,
+              //  color: Colors.amber,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  ElevatedButton(
+                    onPressed: () async {
+                      if (controller.isLoadingUpdate.isFalse) {
+                        // kontroler name dan address wajib di isi
+                        if (nameC.text.isNotEmpty && addressC.text.isNotEmpty) {
+                          controller.isLoadingUpdate(true);
+                          Map<String, dynamic> hasil =
+                              await controller.editProduct({
+                            "id": product.productId,
+                            "name": nameC.text,
+                            "kondisi": kondisiC.text,
+                            "note": noteC.text,
+                            "merek": merekC.text,
+                            "address": addressC.text,
+                          });
+                          controller.isLoadingUpdate(false);
 
-                    // jika hasil erorr maka tampilkan pesan eror jika berhasil tampilkan snackbar berhasil
-                    Get.snackbar(hasil["error"] == true ? "Erorr" : "Berhasil",
-                        hasil["message"],
-                        duration: const Duration(seconds: 2));
-                  } else {
-                    Get.snackbar("Error", "Semua data wajib diisi",
-                        duration: const Duration(seconds: 2));
-                  }
-                }
-              },
-              style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(9),
-                ),
-                padding: const EdgeInsets.symmetric(vertical: 20),
-              ),
-              child: Obx(
-                () => Text(controller.isLoadingUpdate.isFalse
-                    ? "UPDATE PRODUCT"
-                    : "LOADING..."),
-              ),
-            ),
-            TextButton(
-              onPressed: () {
-                Get.defaultDialog(
-                  title: "Delete Product",
-                  middleText: "Are you sure to delete this product ? ",
-                  actions: [
-                    OutlinedButton(
-                      onPressed: () => Get.back(),
-                      child: const Text("CANCEL"),
-                    ),
-                    ElevatedButton(
-                      onPressed: () async {
-                        controller.isLoadingDelete(true);
-                        Map<String, dynamic> hasil =
-                            await controller.deleteProduct(product.productId);
-                        Get.back(); // untuk menutup dialog snakbar
-                        Get.back(); // untuk kembali ke all product
-                        Get.snackbar(
-                            hasil["error"] == true ? "Erorr" : "Berhasil",
-                            hasil["message"],
-                            duration: const Duration(seconds: 2));
-
-                        controller.isLoadingDelete(false);
-                      },
-                      child: Obx(
-                        () => controller.isLoadingDelete.isFalse
-                            ? const Text("DELETE")
-                            : const CircularProgressIndicator(
-                                color: Colors.white,
-                                strokeWidth: 4,
-                              ),
+                          // jika hasil erorr maka tampilkan pesan eror jika berhasil tampilkan snackbar berhasil
+                          Get.snackbar(
+                              hasil["error"] == true ? "Erorr" : "Berhasil",
+                              hasil["message"],
+                              duration: const Duration(seconds: 2));
+                        } else {
+                          Get.snackbar("Error", "Semua data wajib diisi",
+                              duration: const Duration(seconds: 2));
+                        }
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFFF99417),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(9),
                       ),
-                    )
-                  ],
-                );
-              },
-              child: const Text(
-                "Delete Product",
-                style: TextStyle(color: Colors.redAccent),
+                    ),
+                    child: Obx(
+                      () => Text(
+                        controller.isLoadingUpdate.isFalse
+                            ? "Update "
+                            : "Loading...",
+                        style: const TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 18,
+                            letterSpacing: 1.0),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 20,
+                  ),
+                  OutlinedButton(
+                    style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(9),
+                        ),
+                        side: const BorderSide(color: Colors.white)),
+                    onPressed: () {
+                      Get.defaultDialog(
+                        radius: 14,
+                        title: "Delete Product",
+                        middleText: "Are you sure to delete this product ? ",
+                        actions: [
+                          OutlinedButton(
+                            onPressed: () => Get.back(),
+                            child: const Text("CANCEL"),
+                          ),
+                          ElevatedButton(
+                            onPressed: () async {
+                              controller.isLoadingDelete(true);
+                              Map<String, dynamic> hasil = await controller
+                                  .deleteProduct(product.productId);
+                              Get.back(); // untuk menutup dialog snakbar
+                              Get.back(); // untuk kembali ke all product
+                              Get.snackbar(
+                                  hasil["error"] == true ? "Erorr" : "Berhasil",
+                                  hasil["message"],
+                                  duration: const Duration(seconds: 2));
+
+                              controller.isLoadingDelete(false);
+                            },
+                            child: Obx(
+                              () => controller.isLoadingDelete.isFalse
+                                  ? const Text(
+                                      "DELETE",
+                                    )
+                                  : const CircularProgressIndicator(
+                                      color: Colors.white,
+                                      strokeWidth: 4,
+                                    ),
+                            ),
+                          )
+                        ],
+                      );
+                    },
+                    child: const Text(
+                      "Delete ",
+                      style: TextStyle(
+                          color: Colors.redAccent,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 18,
+                          letterSpacing: 1.0),
+                    ),
+                  )
+                ],
               ),
-            )
+            ),
           ],
         ));
   }

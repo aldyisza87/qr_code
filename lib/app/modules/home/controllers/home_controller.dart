@@ -4,6 +4,8 @@ import 'package:get/get.dart';
 import '../../../data/models/product_model.dart';
 
 class HomeController extends GetxController {
+  RxBool isLoadingUpdate = false.obs;
+  RxBool isLoadingDelete = false.obs;
   RxList<ProductModel> allProducts = List<ProductModel>.empty().obs;
   // Inisialisasi firebasefirestore
   FirebaseFirestore firestore = FirebaseFirestore.instance;

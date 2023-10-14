@@ -8,36 +8,69 @@ import '../controllers/login_controller.dart';
 class LoginView extends GetView<LoginController> {
   LoginView({Key? key}) : super(key: key);
 
-  final TextEditingController emailC = TextEditingController(
-    text: "admin@gmail.com",
-  );
-  final TextEditingController passC = TextEditingController(
-    text: "admin123",
-  );
+  final TextEditingController emailC = TextEditingController();
+  final TextEditingController passC = TextEditingController();
 
   final AuthController authC = Get.find<AuthController>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBody: true,
+      extendBodyBehindAppBar: true,
+      backgroundColor: Colors.blue[100],
       appBar: AppBar(
-        title: const Text('LOGIN'),
-        centerTitle: true,
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        automaticallyImplyLeading: false,
       ),
       body: ListView(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.fromLTRB(20, 70, 20, 20),
         children: [
+          const Text(
+            "Login",
+            style: TextStyle(
+              fontSize: 32,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          const Text(
+            "Sign In to Countinue",
+            style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w400,
+                color: Color.fromARGB(255, 102, 98, 98)),
+          ),
+          const SizedBox(
+            height: 64,
+          ),
+          const Text(
+            "Email Address",
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
+          ),
+          const SizedBox(
+            height: 12,
+          ),
           TextField(
             autocorrect: false,
             controller: emailC,
             keyboardType: TextInputType.emailAddress,
             decoration: InputDecoration(
-              labelText: "Email",
+              prefixIcon: const Icon(Icons.email_outlined),
+              hintText: "Your Email Address",
+              // labelText: "Email",
               border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(9),
+                borderRadius: BorderRadius.circular(12),
               ),
             ),
           ),
           const SizedBox(height: 20),
+          const Text(
+            "Password",
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
+          ),
+          const SizedBox(
+            height: 12,
+          ),
           Obx(
             () => TextField(
               autocorrect: false,
@@ -45,7 +78,9 @@ class LoginView extends GetView<LoginController> {
               keyboardType: TextInputType.text,
               obscureText: controller.isHidden.value,
               decoration: InputDecoration(
-                labelText: "Password",
+                hintText: "Your Password",
+                //labelText: "Password",
+                prefixIcon: const Icon(Icons.key_off_outlined),
                 suffixIcon: IconButton(
                   onPressed: () {
                     controller.isHidden.toggle();
@@ -87,14 +122,22 @@ class LoginView extends GetView<LoginController> {
               }
             },
             style: ElevatedButton.styleFrom(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(9),
-              ),
-              padding: const EdgeInsets.symmetric(vertical: 20),
-            ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                padding: const EdgeInsets.symmetric(vertical: 20),
+                elevation: 14),
             child: Obx(
-              () => Text(controller.isLoading.isFalse ? "LOGIN" : "LOADING..."),
+              () => Text(
+                controller.isLoading.isFalse ? "Sign In" : "Loading...",
+                style: const TextStyle(
+                  fontSize: 18,
+                ),
+              ),
             ),
+          ),
+          const SizedBox(
+            height: 200,
           ),
         ],
       ),

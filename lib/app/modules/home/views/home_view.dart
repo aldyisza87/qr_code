@@ -17,8 +17,14 @@ class HomeView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFF363062),
       appBar: AppBar(
-          title: const Text('TNA aset'),
+          backgroundColor: const Color(0xFF4D4C7D),
+          elevation: 0,
+          title: const Text(
+            'TNA aset',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
           centerTitle: false,
           actions: <Widget>[
             IconButton(
@@ -36,13 +42,46 @@ class HomeView extends GetView<HomeController> {
               icon: const Icon(Icons.add_outlined),
             ),
             IconButton(
-              onPressed: () async {
-                Map<String, dynamic> hasil = await authC.logout();
-                if (hasil["error"] == false) {
-                  Get.offAllNamed(Routes.login);
-                } else {
-                  Get.snackbar("Error", hasil["error"]);
-                }
+              onPressed: () {
+                Get.defaultDialog(
+                  radius: 14,
+                  title: "Log Out",
+                  middleText: "Are you sure you want to exit?",
+                  actions: [
+                    OutlinedButton(
+                      onPressed: () => Get.back(),
+                      child: const Text("Cancel"),
+                    ),
+                    ElevatedButton(
+                      onPressed: () async {
+                        Map<String, dynamic> hasil = await authC.logout();
+                        if (hasil["error"] == false) {
+                          Get.offAllNamed(Routes.login);
+                        } else {
+                          Get.snackbar("Error", hasil["error"]);
+                        }
+                        Get.back(); // untuk menutup dialog snakbar
+                        Get.back(); // untuk kembali ke all product
+                        Get.snackbar(
+                            hasil["error"] == true ? "Erorr" : "Berhasil",
+                            hasil["message"],
+                            duration: const Duration(seconds: 2));
+
+                        controller.isLoadingDelete(false);
+                      },
+                      child: Obx(
+                        () => controller.isLoadingDelete.isFalse
+                            ? const Text(
+                                "Yes",
+                              )
+                            : const CircularProgressIndicator(
+                                color: Colors.white,
+                                strokeWidth: 4,
+                              ),
+                      ),
+                    )
+                  ],
+                );
               },
               icon: const Icon(Icons.logout),
             ),
@@ -127,6 +166,7 @@ class HomeView extends GetView<HomeController> {
           }),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
+        backgroundColor: const Color(0xFF4D4C7D),
         onPressed: () async {
           String barcode = await FlutterBarcodeScanner.scanBarcode(
             "#39DE1E",

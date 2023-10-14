@@ -69,7 +69,9 @@ class _SearchState extends State<Search> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFF363062),
       appBar: AppBar(
+        backgroundColor: const Color(0xFF4D4C7D),
         title: CupertinoSearchTextField(
           backgroundColor: Colors.white,
           controller: _searcController,
@@ -81,12 +83,15 @@ class _SearchState extends State<Search> {
           return ListTile(
             title: Text(
               _resultList[index]['name'],
+              style: const TextStyle(color: Colors.white70, fontSize: 16),
             ),
             leading: Text(
               _resultList[index]['code'],
+              style: const TextStyle(color: Colors.white, fontSize: 14),
             ),
             trailing: Text(
               _resultList[index]['address'],
+              style: const TextStyle(color: Colors.white, fontSize: 16),
             ),
           );
         },

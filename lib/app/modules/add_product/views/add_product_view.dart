@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:qr_code/app/widget/text_field.dart';
 
 import '../controllers/add_product_controller.dart';
 
@@ -15,93 +16,63 @@ class AddProductView extends GetView<AddProductController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBody: true,
+      backgroundColor: const Color(0xFF363062),
       appBar: AppBar(
-        title: const Text('Add Product'),
+        backgroundColor: const Color(0xFF4D4C7D),
+        elevation: 0,
+        title: const Text(
+          'New Product',
+          style: TextStyle(
+              fontSize: 24, fontWeight: FontWeight.bold, letterSpacing: 1.8),
+        ),
         centerTitle: true,
       ),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          TextField(
-            autocorrect: false,
-            maxLength: 20,
+          CustomTextField(
             controller: codeC,
-            keyboardType: TextInputType.text,
-            decoration: InputDecoration(
-              labelText: "Product Code",
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(14),
-              ),
-            ),
+            labelText: "Product Code",
+            maxLength: 20,
           ),
           const SizedBox(
             height: 10,
           ),
-          TextField(
-            autocorrect: false,
+          CustomTextField(
             controller: nameC,
-            keyboardType: TextInputType.text,
-            decoration: InputDecoration(
-              labelText: "Name Product",
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(14),
-              ),
-            ),
+            labelText: "Name Product",
           ),
           const SizedBox(
             height: 10,
           ),
-          TextField(
-            autocorrect: false,
+          CustomTextField(
             controller: merekC,
-            keyboardType: TextInputType.text,
-            decoration: InputDecoration(
-              labelText: "Merek",
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(14),
-              ),
-            ),
+            labelText: "Merek",
           ),
           const SizedBox(
             height: 10,
           ),
-          TextField(
-            autocorrect: false,
+          CustomTextField(
             controller: kondisiC,
-            keyboardType: TextInputType.text,
-            decoration: InputDecoration(
-              labelText: "Kondisi",
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(14),
-              ),
-            ),
+            labelText: "Kondisi",
           ),
           const SizedBox(
             height: 10,
           ),
-          TextField(
-            autocorrect: false,
+          CustomTextField(
             controller: addressC,
-            decoration: InputDecoration(
-              labelText: "Location",
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(14),
-              ),
-            ),
+            labelText: "Location",
           ),
           const SizedBox(
             height: 10,
           ),
-          TextField(
-            autocorrect: false,
+          CustomTextField(
             controller: noteC,
-            keyboardType: TextInputType.text,
-            decoration: InputDecoration(
-              labelText: "Note",
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(14),
-              ),
-            ),
+            labelText: "Note",
+          ),
+          const SizedBox(
+            height: 10,
           ),
           const SizedBox(height: 35),
           ElevatedButton(
@@ -134,14 +105,21 @@ class AddProductView extends GetView<AddProductController> {
               }
             },
             style: ElevatedButton.styleFrom(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(9),
-              ),
-              padding: const EdgeInsets.symmetric(vertical: 20),
-            ),
+                backgroundColor: const Color(0xFFF99417),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                padding: const EdgeInsets.symmetric(vertical: 20),
+                elevation: 14),
             child: Obx(
               () => Text(
-                  controller.isLoading.isFalse ? "Add Product" : "LOADING..."),
+                controller.isLoading.isFalse ? "Add New Item" : "Loading...",
+                style: const TextStyle(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 18,
+                  letterSpacing: 1.0,
+                ),
+              ),
             ),
           ),
         ],

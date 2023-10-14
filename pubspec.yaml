@@ -3,10 +3,11 @@ version: 1.0.0+1
 publish_to: none
 description: A new Flutter project.
 environment:
-  sdk: ">=3.0.1 <4.0.0"
+  sdk: '>=3.0.1 <4.0.0'
 
 dependencies:
   cloud_firestore: ^4.8.1
+  concentric_transition: ^1.0.3
   cupertino_icons: ^1.0.2
   firebase_auth: ^4.6.2
   firebase_core: ^2.13.0
@@ -16,6 +17,7 @@ dependencies:
   flutter_launcher_icons: ^0.13.1
   get: 4.6.5
   google_fonts: ^5.1.0
+  lottie: ^2.6.0
   qr_flutter: ^4.0.0
 
 dev_dependencies:
@@ -23,9 +25,9 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 flutter_launcher_icons:
-  android: "launcher_icon"
+  android: 'launcher_icon'
   ios: true
-  image_path: "assets/icon/tna.png"
+  image_path: 'assets/icon/tna.png'
   min_sdk_android: 21 # android min sdk min:16, default 21
 
 flutter:
