@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 
@@ -14,16 +15,32 @@ import '../controllers/home_controller.dart';
 class HomeView extends GetView<HomeController> {
   HomeView({Key? key}) : super(key: key);
   final AuthController authC = Get.find<AuthController>();
+  final user = FirebaseAuth.instance.currentUser!;
+
   @override
   Widget build(BuildContext context) {
+    bool showAdd = user.email == 'admin@tna.com';
     return Scaffold(
       backgroundColor: const Color(0xFF363062),
       appBar: AppBar(
           backgroundColor: const Color(0xFF4D4C7D),
           elevation: 0,
-          title: const Text(
-            'TNA aset',
-            style: TextStyle(fontWeight: FontWeight.bold),
+          title: RichText(
+            text: TextSpan(
+              children: <TextSpan>[
+                const TextSpan(
+                  text: 'Dashboard\n',
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 28,
+                      letterSpacing: 1),
+                ),
+                TextSpan(
+                  text: '${user.email!} | PT. TNA',
+                  style: const TextStyle(fontSize: 12),
+                ),
+              ],
+            ),
           ),
           centerTitle: false,
           actions: <Widget>[
@@ -35,11 +52,14 @@ class HomeView extends GetView<HomeController> {
               },
               icon: const Icon(Icons.search),
             ),
-            IconButton(
-              onPressed: () {
-                Get.toNamed(Routes.addProduct);
-              },
-              icon: const Icon(Icons.add_outlined),
+            Visibility(
+              visible: showAdd,
+              child: IconButton(
+                onPressed: () {
+                  Get.toNamed(Routes.addProduct);
+                },
+                icon: const Icon(Icons.add_outlined),
+              ),
             ),
             IconButton(
               onPressed: () {

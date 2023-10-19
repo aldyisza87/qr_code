@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -16,8 +17,10 @@ class DetailProductView extends GetView<DetailProductController> {
   final TextEditingController noteC = TextEditingController();
 
   final ProductModel product = Get.arguments;
+  final user = FirebaseAuth.instance.currentUser!;
   @override
   Widget build(BuildContext context) {
+    bool showDelete = user.email == 'admin@tna.com';
     codeC.text = product.code;
     nameC.text = product.name;
     merekC.text = product.merek;
@@ -91,7 +94,7 @@ class DetailProductView extends GetView<DetailProductController> {
               height: 80,
               //  color: Colors.amber,
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   ElevatedButton(
                     onPressed: () async {
@@ -142,57 +145,62 @@ class DetailProductView extends GetView<DetailProductController> {
                   const SizedBox(
                     width: 20,
                   ),
-                  OutlinedButton(
-                    style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(9),
-                        ),
-                        side: const BorderSide(color: Colors.white)),
-                    onPressed: () {
-                      Get.defaultDialog(
-                        radius: 14,
-                        title: "Delete Product",
-                        middleText: "Are you sure to delete this product ? ",
-                        actions: [
-                          OutlinedButton(
-                            onPressed: () => Get.back(),
-                            child: const Text("CANCEL"),
+                  Visibility(
+                    visible: showDelete,
+                    child: OutlinedButton(
+                      style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(9),
                           ),
-                          ElevatedButton(
-                            onPressed: () async {
-                              controller.isLoadingDelete(true);
-                              Map<String, dynamic> hasil = await controller
-                                  .deleteProduct(product.productId);
-                              Get.back(); // untuk menutup dialog snakbar
-                              Get.back(); // untuk kembali ke all product
-                              Get.snackbar(
-                                  hasil["error"] == true ? "Erorr" : "Berhasil",
-                                  hasil["message"],
-                                  duration: const Duration(seconds: 2));
-
-                              controller.isLoadingDelete(false);
-                            },
-                            child: Obx(
-                              () => controller.isLoadingDelete.isFalse
-                                  ? const Text(
-                                      "DELETE",
-                                    )
-                                  : const CircularProgressIndicator(
-                                      color: Colors.white,
-                                      strokeWidth: 4,
-                                    ),
+                          side: const BorderSide(color: Colors.white)),
+                      onPressed: () {
+                        Get.defaultDialog(
+                          radius: 14,
+                          title: "Delete Product",
+                          middleText: "Are you sure to delete this product ? ",
+                          actions: [
+                            OutlinedButton(
+                              onPressed: () => Get.back(),
+                              child: const Text("CANCEL"),
                             ),
-                          )
-                        ],
-                      );
-                    },
-                    child: const Text(
-                      "Delete ",
-                      style: TextStyle(
-                          color: Colors.redAccent,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 18,
-                          letterSpacing: 1.0),
+                            ElevatedButton(
+                              onPressed: () async {
+                                controller.isLoadingDelete(true);
+                                Map<String, dynamic> hasil = await controller
+                                    .deleteProduct(product.productId);
+                                Get.back(); // untuk menutup dialog snakbar
+                                Get.back(); // untuk kembali ke all product
+                                Get.snackbar(
+                                    hasil["error"] == true
+                                        ? "Erorr"
+                                        : "Berhasil",
+                                    hasil["message"],
+                                    duration: const Duration(seconds: 2));
+
+                                controller.isLoadingDelete(false);
+                              },
+                              child: Obx(
+                                () => controller.isLoadingDelete.isFalse
+                                    ? const Text(
+                                        "DELETE",
+                                      )
+                                    : const CircularProgressIndicator(
+                                        color: Colors.white,
+                                        strokeWidth: 4,
+                                      ),
+                              ),
+                            )
+                          ],
+                        );
+                      },
+                      child: const Text(
+                        "Delete ",
+                        style: TextStyle(
+                            color: Colors.redAccent,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 18,
+                            letterSpacing: 1.0),
+                      ),
                     ),
                   )
                 ],
