@@ -82,11 +82,15 @@ class DetailProductView extends GetView<DetailProductController> {
             const SizedBox(
               height: 10,
             ),
-            CustomTextField(controller: addressC, labelText: "Lokasi"),
+            CustomTextField(
+              controller: noteC,
+              labelText: "Note",
+              hint: "Peminjam - Lokasi",
+            ),
             const SizedBox(
               height: 10,
             ),
-            CustomTextField(controller: noteC, labelText: "Keterangan"),
+            CustomTextField(controller: addressC, labelText: "Lokasi"),
             const SizedBox(
               height: 10,
             ),

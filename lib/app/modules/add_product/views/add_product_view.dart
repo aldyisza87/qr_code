@@ -22,7 +22,7 @@ class AddProductView extends GetView<AddProductController> {
         backgroundColor: const Color(0xFF4D4C7D),
         elevation: 0,
         title: const Text(
-          'New Product',
+          'New Asset',
           style: TextStyle(
               fontSize: 24, fontWeight: FontWeight.bold, letterSpacing: 1.8),
         ),
@@ -70,6 +70,7 @@ class AddProductView extends GetView<AddProductController> {
           CustomTextField(
             controller: noteC,
             labelText: "Note",
+            hint: "Peminjam - Lokasi",
           ),
           const SizedBox(
             height: 10,
