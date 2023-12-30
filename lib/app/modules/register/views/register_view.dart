@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
+
 import 'package:get/get.dart';
+import 'package:qr_code/app/controllers/auth_controller.dart';
+import 'package:qr_code/app/routes/app_pages.dart';
 
-import '../../../controllers/auth_controller.dart';
-import '../../../routes/app_pages.dart';
-import '../controllers/login_controller.dart';
+import '../controllers/register_controller.dart';
 
-class LoginView extends GetView<LoginController> {
-  LoginView({Key? key}) : super(key: key);
-
+class RegisterView extends GetView<RegisterController> {
+  RegisterView({Key? key}) : super(key: key);
   final TextEditingController emailC = TextEditingController();
   final TextEditingController passC = TextEditingController();
+  final TextEditingController confC = TextEditingController();
 
   final AuthController authC = Get.find<AuthController>();
   @override
@@ -21,18 +22,18 @@ class LoginView extends GetView<LoginController> {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.transparent,
-        automaticallyImplyLeading: false,
+        // automaticallyImplyLeading: false,
       ),
       body: ListView(
         padding: const EdgeInsets.fromLTRB(20, 70, 20, 20),
         children: [
           const Text(
-            "Login",
+            "Register",
             style: TextStyle(
                 fontSize: 32, fontWeight: FontWeight.w700, color: Colors.white),
           ),
           const Text(
-            "Sign In to Countinue",
+            "Register below with your details!",
             style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w400,
@@ -58,7 +59,7 @@ class LoginView extends GetView<LoginController> {
                 Icons.email_outlined,
                 color: Colors.white,
               ),
-              hintText: "Your Email Address",
+              hintText: "Email Address",
               hintStyle: const TextStyle(color: Colors.white),
               enabledBorder: OutlineInputBorder(
                   borderSide: const BorderSide(color: Colors.white),
@@ -70,14 +71,14 @@ class LoginView extends GetView<LoginController> {
             ),
             style: const TextStyle(color: Colors.white),
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 8),
           const Text(
             "Password",
             style: TextStyle(
                 fontSize: 18, fontWeight: FontWeight.w400, color: Colors.white),
           ),
           const SizedBox(
-            height: 12,
+            height: 8,
           ),
           Obx(
             () => TextField(
@@ -86,7 +87,7 @@ class LoginView extends GetView<LoginController> {
               keyboardType: TextInputType.text,
               obscureText: controller.isHidden.value,
               decoration: InputDecoration(
-                hintText: "Your Password",
+                hintText: "Password",
                 hintStyle: const TextStyle(
                   color: Colors.white,
                 ),
@@ -125,16 +126,13 @@ class LoginView extends GetView<LoginController> {
                 if (emailC.text.isNotEmpty && passC.text.isNotEmpty) {
                   controller.isLoading(true);
                   Map<String, dynamic> hasil =
-                      await authC.login(emailC.text, passC.text);
+                      await authC.signUp(emailC.text, passC.text);
                   controller.isLoading(false);
 
                   if (hasil["error"] == true) {
                     Get.snackbar("Error", hasil["message"]);
                   } else {
-                    Get.offAllNamed(Routes.home);
-                  }
-                  // handle login status jika email "admin@gmail.com" maka tampilkan dashboard
-                  if (emailC.text == "admin@tna.com") {
+                    Get.snackbar("Success", hasil["message"]);
                     Get.offAllNamed(Routes.home);
                   }
                 } else {
@@ -151,7 +149,7 @@ class LoginView extends GetView<LoginController> {
                 elevation: 14),
             child: Obx(
               () => Text(
-                controller.isLoading.isFalse ? "Sign In" : "Loading...",
+                controller.isLoading.isFalse ? "Sign Up" : "Loading...",
                 style: const TextStyle(
                   fontSize: 18,
                 ),
@@ -165,16 +163,16 @@ class LoginView extends GetView<LoginController> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Text(
-                'Not a member?',
+                'I am a member!',
                 style:
                     TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
               ),
               GestureDetector(
                 onTap: () {
-                  Get.toNamed(Routes.register);
+                  Get.toNamed(Routes.login);
                 },
                 child: const Text(
-                  ' Regiter now',
+                  ' Login now',
                   style: TextStyle(
                       fontWeight: FontWeight.bold, color: Colors.blue),
                 ),

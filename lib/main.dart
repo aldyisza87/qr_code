@@ -53,6 +53,7 @@ class MyApp extends StatelessWidget {
             textTheme: GoogleFonts.varelaRoundTextTheme(
               Theme.of(context).textTheme,
             ),
+            useMaterial3: false,
           ),
           // cek status snapAuth yang berupa user jika memiliki data -> home  ! jika tidak ->login
           initialRoute: snapAuth.hasData ? Routes.home : Routes.login,

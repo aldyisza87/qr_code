@@ -10,6 +10,7 @@ abstract class Routes {
   static const addProduct = _Paths.addProduct;
   static const dashboard = _Paths.dashboard;
   static const detailQr = _Paths.detailQr;
+  static const register = _Paths.register;
 }
 
 abstract class _Paths {
@@ -21,4 +22,5 @@ abstract class _Paths {
   static const addProduct = '/addProduct';
   static const dashboard = '/dashboard';
   static const detailQr = '/detail-qr';
+  static const register = '/register';
 }
