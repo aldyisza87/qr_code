@@ -134,11 +134,14 @@ class LoginView extends GetView<LoginController> {
                     Get.offAllNamed(Routes.home);
                   }
                   // handle login status jika email "admin@gmail.com" maka tampilkan dashboard
-                  if (emailC.text == "admin@tna.com") {
+                  if (emailC.text == "admin@tna.com" ||
+                      passC.text == "admintna") {
                     Get.offAllNamed(Routes.home);
+                  } else {
+                    Get.snackbar("Error", "Email dan password salah");
                   }
                 } else {
-                  Get.snackbar("Error", "Email dan password wajib diisi.");
+                  Get.snackbar("Error", "Email dan password wajib diisi");
                 }
               }
             },

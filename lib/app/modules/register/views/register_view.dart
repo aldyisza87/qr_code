@@ -8,6 +8,7 @@ import '../controllers/register_controller.dart';
 
 class RegisterView extends GetView<RegisterController> {
   RegisterView({Key? key}) : super(key: key);
+
   final TextEditingController emailC = TextEditingController();
   final TextEditingController passC = TextEditingController();
   final TextEditingController confC = TextEditingController();
@@ -22,7 +23,7 @@ class RegisterView extends GetView<RegisterController> {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.transparent,
-        // automaticallyImplyLeading: false,
+        automaticallyImplyLeading: false,
       ),
       body: ListView(
         padding: const EdgeInsets.fromLTRB(20, 70, 20, 20),
