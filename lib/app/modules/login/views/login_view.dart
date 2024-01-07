@@ -138,7 +138,7 @@ class LoginView extends GetView<LoginController> {
                       passC.text == "admintna") {
                     Get.offAllNamed(Routes.home);
                   } else {
-                    Get.snackbar("Error", "Email dan password salah");
+                    Get.snackbar("Succes", "Welcome back ${emailC.text}");
                   }
                 } else {
                   Get.snackbar("Error", "Email dan password wajib diisi");

@@ -1,4 +1,4 @@
-package com.iszaqrcode.qr_code
+package com.tnaisza.aset
 
 import io.flutter.embedding.android.FlutterActivity
 
