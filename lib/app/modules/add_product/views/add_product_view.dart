@@ -11,7 +11,7 @@ class AddProductView extends GetView<AddProductController> {
   final TextEditingController merekC = TextEditingController();
   final TextEditingController kondisiC = TextEditingController();
   final TextEditingController addressC = TextEditingController();
-  final TextEditingController noteC = TextEditingController();
+  // final TextEditingController noteC = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -67,11 +67,11 @@ class AddProductView extends GetView<AddProductController> {
           const SizedBox(
             height: 10,
           ),
-          CustomTextField(
-            controller: noteC,
-            labelText: "Note",
-            hint: "Peminjam - Lokasi",
-          ),
+          // CustomTextField(
+          //   controller: noteC,
+          //   labelText: "Note",
+          //   hint: "Peminjam - Lokasi",
+          // ),
           const SizedBox(
             height: 10,
           ),
@@ -83,7 +83,7 @@ class AddProductView extends GetView<AddProductController> {
                     nameC.text.isNotEmpty &&
                     merekC.text.isNotEmpty &&
                     kondisiC.text.isNotEmpty &&
-                    noteC.text.isNotEmpty &&
+                    // noteC.text.isNotEmpty &&
                     addressC.text.isNotEmpty) {
                   controller.isLoading(true);
                   Map<String, dynamic> hasil = await controller.addProduct({
@@ -91,7 +91,7 @@ class AddProductView extends GetView<AddProductController> {
                     "name": nameC.text,
                     "merek": merekC.text,
                     "kondisi": kondisiC.text,
-                    "note": noteC.text,
+                    // "note": noteC.text,
                     // mengubah text menjadi integer jika gagal try maka nilai defaultnya 0
                     "address": addressC.text,
                   });

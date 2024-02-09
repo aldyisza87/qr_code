@@ -22,6 +22,17 @@ class DetailProductController extends GetxController {
     }
   }
 
+  Future<Map<String, dynamic>> kembali(Map<String, dynamic> data) async {
+    try {
+      await firestore.collection("product").doc(data["id"]).update({
+        "note": data["note"],
+      });
+      return {"error": false, "message": "Berhasi update product."};
+    } catch (e) {
+      return {"error": false, "message": "Tidak dapat update product."};
+    }
+  }
+
   // untuk menghapus produk hanya perlu menghapus document id di collection firestore
   Future<Map<String, dynamic>> deleteProduct(String id) async {
     try {

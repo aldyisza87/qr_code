@@ -1,22 +1,39 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+import 'package:qr_code/app/controllers/auth_controller.dart';
 
-import '../controllers/dashboard_controller.dart';
+import '../controllers/history_controller.dart';
 
-class DashboardView extends GetView<DashboardController> {
+class HistoryView extends GetView<HistoryController> {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
+  HistoryView({Key? key}) : super(key: key);
+  final AuthController authC = Get.find<AuthController>();
+  final user = FirebaseAuth.instance.currentUser!;
 
-  DashboardView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    Map<String, dynamic> data = Get.arguments;
+    bool showdell = user.email == 'admin@tna.com';
     return Scaffold(
       appBar: AppBar(
-        title: const Text('DashboardView'),
+        backgroundColor: const Color(0xFF4D4C7D),
+        elevation: 0,
+        title: const Text('History'),
         centerTitle: true,
+        actions: [
+          Visibility(
+            visible: showdell,
+            child: IconButton(
+              icon: const Icon(Icons.delete),
+              onPressed: () {
+                deleteAllData();
+              },
+            ),
+          ),
+        ],
       ),
       body: ListView(
         children: [
@@ -68,28 +85,21 @@ class DashboardView extends GetView<DashboardController> {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          saveToFirebase(data);
-        },
-        child: const Icon(Icons.save),
-      ),
     );
   }
 
-  // Function to save data to Firebase
-  void saveToFirebase(Map<String, dynamic> data) async {
+  // Function to delete all data from the 'history' collection
+  void deleteAllData() async {
     try {
-      await firestore.collection('history').add({
-        'email': data['email'],
-        'name': data['name'],
-        'note': data['note'],
-        'timestamp': FieldValue.serverTimestamp(),
+      await firestore.collection('history').get().then((querySnapshot) {
+        for (var doc in querySnapshot.docs) {
+          doc.reference.delete();
+        }
       });
 
-      Get.snackbar('Success', 'Data saved to Firebase.');
+      Get.snackbar('Success', 'All data deleted from Firebase.');
     } catch (e) {
-      Get.snackbar('Error', 'Failed to save data to Firebase.');
+      Get.snackbar('Error', 'Failed to delete data from Firebase.');
     }
   }
 }

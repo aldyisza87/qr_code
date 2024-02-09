@@ -12,11 +12,12 @@ class Search extends StatefulWidget {
 class _SearchState extends State<Search> {
   List _allResults = [];
   List _resultList = [];
-  final TextEditingController _searcController = TextEditingController();
+  final TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
-    _searcController.addListener(_onSearchChanged);
+    _searchController.addListener(_onSearchChanged);
+    _searchController.text = " ";
     super.initState();
   }
 
@@ -26,18 +27,18 @@ class _SearchState extends State<Search> {
 
   searchResultList() {
     var showResult = [];
-    if (_searcController.text != "") {
+    if (_searchController.text.isNotEmpty) {
       for (var productSnapShot in _allResults) {
         var name = productSnapShot['name'].toString().toLowerCase();
-        if (name.contains(_searcController.text.toLowerCase())) {
+        if (name.contains(_searchController.text.toLowerCase())) {
           showResult.add(productSnapShot);
         }
       }
     } else {
-      showResult = List.from(_allResults);
+      const Center(child: Text('search'));
     }
     setState(() {
-      _resultList = showResult;
+      _resultList = List.from(showResult);
     });
   }
 
@@ -55,8 +56,8 @@ class _SearchState extends State<Search> {
 
   @override
   void dispose() {
-    _searcController.removeListener(_onSearchChanged);
-    _searcController.dispose();
+    _searchController.removeListener(_onSearchChanged);
+    _searchController.dispose();
     super.dispose();
   }
 
@@ -74,7 +75,7 @@ class _SearchState extends State<Search> {
         backgroundColor: const Color(0xFF4D4C7D),
         title: CupertinoSearchTextField(
           backgroundColor: Colors.white,
-          controller: _searcController,
+          controller: _searchController,
         ),
       ),
       body: ListView.builder(

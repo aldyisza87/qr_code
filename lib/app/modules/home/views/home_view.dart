@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 
 import 'package:get/get.dart';
+import 'package:qr_code/app/modules/history/views/history_view.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import '../../../../search.dart';
 import '../../../controllers/auth_controller.dart';
@@ -44,23 +45,6 @@ class HomeView extends GetView<HomeController> {
           ),
           centerTitle: false,
           actions: <Widget>[
-            IconButton(
-              onPressed: () {
-                // pindah ke halaman simple
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const Search()));
-              },
-              icon: const Icon(Icons.search),
-            ),
-            Visibility(
-              visible: showAdd,
-              child: IconButton(
-                onPressed: () {
-                  Get.toNamed(Routes.addProduct);
-                },
-                icon: const Icon(Icons.add_outlined),
-              ),
-            ),
             IconButton(
               onPressed: () {
                 Get.defaultDialog(
@@ -147,7 +131,7 @@ class HomeView extends GetView<HomeController> {
                     borderRadius: BorderRadius.circular(16),
                     child: Container(
                       margin: const EdgeInsets.all(20),
-                      height: 70,
+                      height: 85,
                       child: Row(
                         children: [
                           Expanded(
@@ -162,8 +146,9 @@ class HomeView extends GetView<HomeController> {
                                 const SizedBox(
                                   height: 2,
                                 ),
-                                Text("Name     : ${product.name}"),
-                                Text("Address : ${product.address}"),
+                                Text("Name         : ${product.name}"),
+                                Text("Lokasi        : ${product.address}"),
+                                Text("Peminjam  : ${product.note}"),
                               ],
                             ),
                           ),
@@ -184,7 +169,7 @@ class HomeView extends GetView<HomeController> {
               },
             );
           }),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      /*  floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
         backgroundColor: const Color(0xFF4D4C7D),
         onPressed: () async {
@@ -208,6 +193,113 @@ class HomeView extends GetView<HomeController> {
           }
         },
         child: const Icon(Icons.qr_code_scanner),
+      ), */
+
+      bottomNavigationBar: BottomAppBar(
+        height: 80,
+        color: const Color(0xFF4D4C7D),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            SizedBox(
+              width: 70,
+              child: Column(
+                children: [
+                  IconButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const Search()));
+                    },
+                    icon: const Icon(Icons.search, color: Colors.white),
+                  ),
+                  const Text(
+                    'search',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(
+              width: 70,
+              child: Column(
+                children: [
+                  IconButton(
+                    onPressed: () async {
+                      String barcode = await FlutterBarcodeScanner.scanBarcode(
+                        "#39DE1E",
+                        "CANCEL",
+                        true,
+                        ScanMode.QR,
+                      );
+
+                      // Get data dari firebase search by product id
+                      Map<String, dynamic> hasil =
+                          await controller.getProductById(barcode);
+                      if (hasil["error"] == false) {
+                        Get.toNamed(Routes.detailProduct,
+                            arguments: hasil["data"]);
+                      } else {
+                        Get.snackbar(
+                          "Error",
+                          hasil["message"],
+                          duration: const Duration(seconds: 2),
+                        );
+                      }
+                    },
+                    icon: const Icon(Icons.qr_code_scanner_rounded,
+                        color: Colors.white),
+                  ),
+                  const Text(
+                    'scan',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(
+              width: 70,
+              child: Column(
+                children: [
+                  IconButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => HistoryView()));
+                    },
+                    icon: const Icon(Icons.list, color: Colors.white),
+                  ),
+                  const Text(
+                    'history',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ],
+              ),
+            ),
+            Visibility(
+              visible: showAdd,
+              child: SizedBox(
+                width: 70,
+                child: Column(
+                  children: [
+                    IconButton(
+                      onPressed: () {
+                        Get.toNamed(Routes.addProduct);
+                      },
+                      icon: const Icon(Icons.add_outlined, color: Colors.white),
+                    ),
+                    const Text(
+                      'new asset',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
