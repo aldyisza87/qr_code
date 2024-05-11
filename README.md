@@ -9,7 +9,7 @@ And atleast this project for Skripsi
 
 
 Link Download Aplikasi
-https://drive.google.com/file/d/1zuFjKEsz068lWhRSBwnghZZfWji2qJTj/view?usp=drivesdk
+https://drive.google.com/file/d/1AneynIOBUbU_hxSstKHTXqaA191khRSF/view?usp=sharing
 
 Menginstal dari File APK yang Diunduh:
 Aktifkan Sumber Tidak Dikenal:
