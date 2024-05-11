@@ -15,7 +15,8 @@ class DashboardView extends GetView<DashboardController> {
     Map<String, dynamic> data = Get.arguments;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('DashboardView'),
+        backgroundColor: const Color(0xFF4D4C7D),
+        title: const Text('Peminjaman'),
         centerTitle: true,
       ),
       body: ListView(
@@ -38,9 +39,9 @@ class DashboardView extends GetView<DashboardController> {
                 child: DataTable(
                   columns: const [
                     DataColumn(label: Text('Email')),
-                    DataColumn(label: Text('Name')),
-                    DataColumn(label: Text('Note')),
-                    DataColumn(label: Text('Timestamp')),
+                    DataColumn(label: Text('Asset')),
+                    DataColumn(label: Text('Lokasi')),
+                    DataColumn(label: Text('Waktu')),
                   ],
                   rows: historyData.map<DataRow>((DocumentSnapshot document) {
                     Map<String, dynamic> data =
@@ -69,6 +70,7 @@ class DashboardView extends GetView<DashboardController> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: const Color(0xFF4D4C7D),
         onPressed: () {
           saveToFirebase(data);
         },
@@ -87,9 +89,9 @@ class DashboardView extends GetView<DashboardController> {
         'timestamp': FieldValue.serverTimestamp(),
       });
 
-      Get.snackbar('Success', 'Data saved to Firebase.');
+      Get.snackbar('Success', 'Data saved to history.');
     } catch (e) {
-      Get.snackbar('Error', 'Failed to save data to Firebase.');
+      Get.snackbar('Error', 'Failed to save data to history.');
     }
   }
 }
